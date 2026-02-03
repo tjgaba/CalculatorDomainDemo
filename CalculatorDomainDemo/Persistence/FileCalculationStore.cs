@@ -22,7 +22,7 @@ namespace CalculatorDomain.Persistence
             await File.WriteAllTextAsync(_filePath, json);
         }
 
-        public async Task<IReadOnlyList<Calculation>> LoadAllAsync()
+        /*public async Task<IReadOnlyList<Calculation>> LoadAllAsync()
         {
             if (!File.Exists(_filePath))
                 return new List<Calculation>();
@@ -31,6 +31,22 @@ namespace CalculatorDomain.Persistence
 
             return JsonSerializer.Deserialize<List<Calculation>>(json)
                    ?? new List<Calculation>();
+        }*/
+
+        public async Task<IReadOnlyList<Calculation>> LoadAllAsync()
+        {
+            if (!File.Exists(_filePath))
+            return new List<Calculation>();
+
+            string json = await File.ReadAllTextAsync(_filePath);
+
+            if (string.IsNullOrWhiteSpace(json))
+            return new List<Calculation>();
+
+            List<Calculation> calculations = JsonSerializer.Deserialize<List<Calculation>>(json)
+            ?? new List<Calculation>();
+
+            return calculations;
         }
     }
 }
